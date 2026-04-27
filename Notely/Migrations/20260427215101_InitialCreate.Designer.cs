@@ -12,7 +12,7 @@ using Notely.Models;
 namespace Notely.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260427194825_InitialCreate")]
+    [Migration("20260427215101_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -170,7 +170,11 @@ namespace Notely.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created_at")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -181,6 +185,10 @@ namespace Notely.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Hashed_password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -252,16 +260,13 @@ namespace Notely.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<bool>("IsPublic")
+                    b.Property<bool>("State")
                         .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()

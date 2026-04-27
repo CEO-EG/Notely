@@ -10,7 +10,7 @@ public class NotesController : Controller
     {
         _context = context;
     }
-   
+    
     public async Task<IActionResult> Index()
     {
         var notes = await _context.Notes.ToListAsync();
@@ -20,8 +20,5 @@ public class NotesController : Controller
 
 
 
-    //public IActionResult Index()
-    //{
-    //    return View();
-    //}
+    
 }

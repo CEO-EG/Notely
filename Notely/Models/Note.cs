@@ -5,6 +5,7 @@ namespace Notely.Models
 {
     public class Note
     {
+        [Key]
         public int Id {  get; set; }
 
         [Required(ErrorMessage = "Title is required")]
@@ -15,12 +16,11 @@ namespace Notely.Models
         [MaxLength(5000, ErrorMessage = "Content cannot exceed 5000 characters.")]
         public string Content { get; set; }= string.Empty;
         [Display(Name = "Make Public")]
-        public bool IsPublic { get; set; } = false;
+        public bool State { get; set; } = false;
         [MaxLength(500)]
         public string? ImagePath { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
         [Required]
         public string UserId { get; set; } = string.Empty;
         [ForeignKey(nameof(UserId))]

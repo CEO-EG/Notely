@@ -9,6 +9,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<Note> Notes => Set<Note>();
+    public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -1,4 +1,4 @@
-namespace Notely.Models
+﻿namespace Notely.Models
 {
     public class ErrorViewModel
     {
