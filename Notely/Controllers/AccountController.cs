@@ -109,8 +109,6 @@ namespace Notely.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                
 
-                //if (user != null && await _userManager.IsInRoleAsync(user, "Admin"))
-                //    return RedirectToAction("Index", "Admin");
 
                 return RedirectToAction("Index", "Notes");
             }
