@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<Notely.Models.ApplicationUser> SignInManager
 @inject UserManager<Notely.Models.ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var firstName = user?.Fullname?.Split(' ')[0];
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +15,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Notely.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -18,81 +23,82 @@
             <div class="container-fluid">
 
                 
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Notely</a>
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
 
-            
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
+                    <i class="bi bi-journal-bookmark-fill"
+                       style="font-size:24px;color:#0d6efd;margin-right:8px;"></i>
+
+                    <span class="fw-bold">Notely</span>
+
+                </a>
                 </button>
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
                    
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                        </li> *@
                         
                     </ul>
 
                    
                     <ul class="navbar-nav ms-auto">
 
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            var user = await UserManager.GetUserAsync(User);
+    @if (SignInManager.IsSignedIn(User))
+    {
+        
 
-                            <li class="nav-item dropdown">
+        <li class="nav-item dropdown">
 
-                                
-                                <a class="nav-link dropdown-toggle d-flex align-items-center"
-                                       href="#"
-                                       role="button"
-                                       data-bs-toggle="dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center"
+               href="#"
+               data-bs-toggle="dropdown">
 
-                                    <img src="@(user?.ProfileImagepath ?? "/imgs/default.png")"
-                                         style="width:35px;height:35px;border-radius:50%;object-fit:cover;margin-right:8px;" />
+                <img src="@(user?.ProfileImagepath ?? "/imgs/default.png")"
+                     style="width:35px;height:35px;border-radius:50%;margin-right:8px;" />
 
-                                    <span>@user?.Fullname</span>
-                                </a>
+                <span>@firstName</span>
+            </a>
 
-                                
-                                <ul class="dropdown-menu dropdown-menu-end p-3">
+            <div class="dropdown-menu dropdown-menu-end p-3 text-center">
 
-                                    <div class="text-center">
-                                        <img src="@(user?.ProfileImagepath ?? "/imgs/default.png")"
-                                             style="width:60px;height:60px;border-radius:50%;object-fit:cover;" />
+                <img src="@(user?.ProfileImagepath ?? "/imgs/default.png")"
+                     style="width:70px;height:70px;border-radius:50%;margin-bottom:10px;" />
 
-                                        <h6 class="mt-2">@user?.Fullname</h6>
-                                        <small class="text-muted">@user?.Email</small>
-                                    </div>
+                <h6>@user?.Fullname</h6>
+                <p class="text-muted" style="font-size:13px">@user?.Email</p>
 
-                                    <hr />
+                <hr />
 
-                                    <li>
-                                        <form asp-controller="Account" asp-action="Logout" method="post">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                Logout
-                                            </button>
-                                        </form>
-                                    </li>
+                <a class="dropdown-item" asp-controller="Notes" asp-action="Index">
+                    📂 My Notes
+                </a>
 
-                                </ul>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="dropdown-item text-danger">
+                        Logout
+                    </button>
+                </form>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
-                        }
+            </div>
 
-                    </ul>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+        </li>
+    }
+
+</ul>
 
                 </div>
             </div>
@@ -105,12 +111,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Notely -
-            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+   
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

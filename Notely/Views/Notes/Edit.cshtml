@@ -1,51 +1,51 @@
 @model Notely.Models.Note
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<div class="container mt-5">
+    <div class="card shadow p-4 mx-auto" style="max-width:600px">
 
-<h1>Edit</h1>
+        <h3 class="mb-4 text-center">✏️ Edit Note</h3>
 
-<h4>Note</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Edit" method = "post" enctype="multipart/form-data">
+
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
+            <input type="hidden" asp-for="CreatedAt" />
+
+            <!-- Image -->
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <img src="@Model.ImagePath" class="img-fluid rounded mb-3" style="height:200px;object-fit:cover;" />
+            }
+
+            <!-- Title -->
+            <div class="mb-3">
+                <label class="form-label">Title</label>
                 <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
+
+            <!-- Content -->
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea asp-for="Content" class="form-control"></textarea>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="State" /> @Html.DisplayNameFor(model => model.State)
-                </label>
+
+            <!-- Public -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="State" />
+                <label class="form-check-label">Make Public</label>
             </div>
-            
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+
+            <!-- Upload new image -->
+            <div class="mb-3">
+                <label class="form-label">Change Image</label>
+                <input type="file" asp-for="ImageFile" class="form-control position-relative" style="z-index:10;" />
             </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">⬅ Back</a>
+                <button type="submit" class="btn btn-primary">💾 Save</button>
             </div>
+
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -1,43 +1,36 @@
 @model Notely.Models.Note
 
-@{
-    ViewData["Title"] = "Details";
-}
+<div class="container mt-5">
+    <div class="card shadow p-4 mx-auto" style="max-width:600px">
 
-<h1>Details</h1>
+        <h3 class="text-center mb-3">📄 Note Details</h3>
 
-<div>
-   
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.State)
-        </dd>
-        
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <img src="@Model.ImagePath" class="img-fluid rounded mb-3" style="height:200px;object-fit:cover;" />
+        }
+
+        <h4> Title: @Model.Title</h4>
+        <p class="text-muted">Content: @Model.Content</p>
+
+        <p>
+            <strong>Status:</strong>
+            @if (Model.State)
+            {
+                <span class="text-success">Public 🌍</span>
+            }
+            else
+            {
+                <span class="text-warning">Private 🔒</span>
+            }
+        </p>
+
+        <p class="text-muted">@Model.CreatedAt.ToString("dd MMM yyyy")</p>
+
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">⬅ Back</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">✏️ Edit</a>
+        </div>
+
+    </div>
 </div>

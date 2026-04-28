@@ -21,15 +21,18 @@ namespace Notely.Controllers
         }
 
         // GET: Notes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
             var userId = _userManager.GetUserId(User);
 
-            var notes = await _context.Notes
-                .Where(n => n.UserId == userId || n.State)
-                .ToListAsync();
+            var notes = _context.Notes
+                .Where(n => n.UserId == userId || n.State);
+            if (!string.IsNullOrEmpty(search))
+            {
+                notes = notes.Where(n => n.Title.Contains(search));
+            }
 
-            return View(notes);
+            return View(await notes.ToListAsync());
         }
         public async Task<IActionResult> Private()
         {
@@ -145,6 +148,22 @@ namespace Notely.Controllers
                 existingNote.Title = note.Title;
                 existingNote.Content = note.Content;
                 existingNote.State = note.State;
+                if (note.ImageFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_env.WebRootPath, "imgs");
+
+                    
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(note.ImageFile.FileName);
+
+                    string filePath = Path.Combine(uploadsFolder, fileName);
+
+                    
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await note.ImageFile.CopyToAsync(stream);
+                    }
+                    existingNote.ImagePath = "/imgs/" + fileName;
+                }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

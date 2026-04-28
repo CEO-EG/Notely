@@ -1,50 +1,54 @@
 @model Notely.Models.Note
 
-@{
-    ViewData["Title"] = "Create";
-}
+<div class="container mt-5">
+    <div class="card shadow p-4 mx-auto" style="max-width:600px">
 
-<h1>Create</h1>
+        <h3 class="text-center mb-4">📝 Create New Note</h3>
 
-<h4>Note</h4>
-<hr />
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
 
-<div class="row">
-    <div class="col-md-4">
+            @Html.AntiForgeryToken()
 
-        <form asp-action="Create" method="post"  enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* <!-- Preview Image -->
+            <img id="preview" src="/imgs/default.png"
+                 class="img-fluid rounded mb-3"
+                 style="height:200px;object-fit:cover;" /> *@
 
-            
-            <div class="form-group">
-                <label asp-for="Title"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+            <!-- Title -->
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input asp-for="Title" class="form-control" placeholder="Enter title..." />
             </div>
 
-
-            <div class="form-group">
-                <label asp-for="Content"></label>
-                <textarea asp-for="Content" class="form-control"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
+            <!-- Content -->
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea asp-for="Content" class="form-control" placeholder="Write your note..."></textarea>
             </div>
 
-            
-            <div class="form-group form-check">
+            <!-- Public -->
+            <div class="form-check mb-3">
                 <input class="form-check-input" asp-for="State" />
                 <label class="form-check-label">Make Public</label>
             </div>
 
-           
-            <div class="form-group">
-                <label>Upload Image</label>
-                <input type="file" asp-for="ImageFile" class="form-control" />
+            <!-- Upload Image -->
+            <div class="mb-3">
+                <label class="form-label">Upload Image</label>
+
+                <input type="file"
+                       asp-for="ImageFile"
+                       class="form-control"
+                       accept="image/*"
+                       onchange="previewImage(event)" />
             </div>
 
-           
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">⬅ Back</a>
+                <button type="submit" class="btn btn-success">➕ Create</button>
             </div>
 
         </form>
@@ -52,11 +56,14 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
+    <script>
+        function previewImage(event) {
+            var img = document.getElementById('preview');
+            img.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
