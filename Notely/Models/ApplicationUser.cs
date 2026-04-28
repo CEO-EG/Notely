@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notely.Models
 {
@@ -21,11 +22,11 @@ namespace Notely.Models
 
         public DateTime Created_at { get; set; }
 
-        [Required]
-        public string Hashed_password { get; set; }
-
         [MaxLength(300)]
-        public string? ProfileImagePath { get; set; }
+        public string? ProfileImagepath { get; set; }
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
         public ICollection<Note> Notes { get; set; } = new List<Note>();
     }
 }

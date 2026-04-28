@@ -11,6 +11,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Note> Notes => Set<Note>();
     public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
 
+
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

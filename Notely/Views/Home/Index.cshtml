@@ -1,8 +1,72 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+
+    
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Welcome to Notely 📝</h1>
+        <p class="text-muted">Save your notes, organize your ideas, and access them anytime.</p>
+
+        <a asp-controller="Notes" asp-action="Create" class="btn btn-primary btn-lg mt-3">
+            ➕ Create New Note
+        </a>
+    </div>
+
+   
+    <div class="row text-center mb-5">
+
+        
+        <div class="col-md-4">
+            <a asp-controller="Notes" asp-action="Index" class="text-decoration-none text-dark">
+                <div class="p-4 shadow-sm rounded bg-light card-hover">
+                    <h5>📌 Organize</h5>
+                    <p>Keep all your notes in one place.</p>
+                </div>
+            </a>
+        </div>
+
+        
+        <div class="col-md-4">
+            <a asp-controller="Notes" asp-action="Private" class="text-decoration-none text-dark">
+                <div class="p-4 shadow-sm rounded bg-light card-hover">
+                    <h5>🔒 Private</h5>
+                    <p>Your notes are secure and private.</p>
+                </div>
+            </a>
+        </div>
+
+       
+        <div class="col-md-4">
+            <a asp-controller="Notes" asp-action="Public" class="text-decoration-none text-dark">
+                <div class="p-4 shadow-sm rounded bg-light card-hover">
+                    <h5>🌍 Public Notes</h5>
+                    <p>Share notes with others if you want.</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+   
+    <div class="text-center">
+        <a asp-controller="Notes" asp-action="Index" class="btn btn-outline-dark">
+            📂 View My Notes
+        </a>
+    </div>
+
 </div>
+
+
+<style>
+    .card-hover {
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+        .card-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+</style>

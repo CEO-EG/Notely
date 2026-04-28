@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Notely.Models;
 
@@ -8,7 +9,37 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+});
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>((options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false; 
+    options.Password.RequiredLength = 6;
+}))
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 var app = builder.Build();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+//    //string[] roles = { "User" };
+
+//    //foreach (var role in roles)
+//    //{
+//    //    if (!await roleManager.RoleExistsAsync(role))
+//    //    {
+//    //        await roleManager.CreateAsync(new IdentityRole(role));
+//    //    }
+//    //}
+//}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -18,13 +49,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

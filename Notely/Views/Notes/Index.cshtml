@@ -1,31 +1,61 @@
-﻿@model List<Notely.Models.Note>
+@model IEnumerable<Notely.Models.Note>
 
-<h2>All Notes</h2>
+@{
+    ViewData["Title"] = "My Notes";
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Content</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            @foreach (var note in Model)
-            {
-                <tr>
-                    <td>@note.Title</td>
-                    <td>@note.Content</td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="2">No notes found</td>
-            </tr>
-        }
+<h2 class="mb-4">My Notes</h2>
 
-    </tbody>
-</table>
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ Create New Note</a>
+</p>
+
+<div class="row">
+
+    @foreach (var note in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 p-2">
+
+                
+                @if (!string.IsNullOrEmpty(note.ImagePath))
+                {
+                    <img src="@note.ImagePath"
+                         style="width:100%;height:180px;object-fit:cover;border-radius:10px;" />
+                }
+                else
+                {
+                    <img src="/imgs/default.png"
+                         style="width:100%;height:180px;object-fit:cover;border-radius:10px;" />
+                }
+
+            
+                <div class="card-body">
+                    <h5 class="card-title">@note.Title</h5>
+                    <p class="card-text">@note.Content</p>
+
+                    <p>
+                        <small class="text-muted">
+                            @note.CreatedAt.ToString("dd MMM yyyy")
+                        </small>
+                    </p>
+
+                    <p>
+                        <strong>
+                            @(note.State ? "Public 🌍" : "Private 🔒")
+                        </strong>
+                    </p>
+                </div>
+
+                
+                <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                    <a asp-action="Edit" asp-route-id="@note.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@note.Id" class="btn btn-sm btn-outline-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@note.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+
+            </div>
+        </div>
+    }
+
+</div>
