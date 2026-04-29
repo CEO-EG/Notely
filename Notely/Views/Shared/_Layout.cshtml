@@ -24,7 +24,8 @@
     <link rel="stylesheet" href="~/css/site.css"       asp-append-version="true" />
     <link rel="stylesheet" href="~/Notely.styles.css"  asp-append-version="true" />
 
-    <!-- Apply saved theme before first paint to avoid flash -->
+    <!-- Apply saved theme before first paint to prevent flash of unstyled theme.
+         theme-toggle.js (loaded in body) handles the toggle interaction. -->
     <script>
         (function () {
             var t = localStorage.getItem('notely-theme');

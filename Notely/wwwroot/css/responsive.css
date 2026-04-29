@@ -146,7 +146,7 @@
 }
 
 /* ── Touch targets (min 44×44 for WCAG 2.5.5) ───────────────── */
-@media (hover: none) {
+@media (hover: none), (pointer: coarse) {
     .btn, .nav-link, .dropdown-item,
     .form-check-input, .avatar-trigger {
         min-height: 44px;

@@ -142,8 +142,20 @@
     color: var(--text-primary) !important;
 }
 .navbar-toggler:focus { box-shadow: var(--input-focus-ring) !important; }
+/* Theme-adaptive hamburger icon using CSS mask instead of hardcoded color in data-URI */
 .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%234f46e5' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    width: 1.25em;
+    height: 1.25em;
+    background-color: var(--color-primary) !important;
+    -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='black' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: 100%;
+    mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='black' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 100%;
+    background-image: none !important;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────── */

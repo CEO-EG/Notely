@@ -2,6 +2,9 @@
    theme.css — CSS custom properties for light / dark theming
    ============================================================ */
 
+/* ── Import Google Fonts (must be first for optimal loading) ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 /* ── Light theme (default) ─────────────────────────────────── */
 :root {
     /* Brand colours */
@@ -173,6 +176,3 @@ a {
     transition: color var(--transition-fast);
 }
 a:hover { color: var(--color-primary-hover); }
-
-/* ── Import Google Fonts ─────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
