@@ -1,69 +1,93 @@
 @model Notely.Models.Note
 
-<div class="container mt-5">
-    <div class="card shadow p-4 mx-auto" style="max-width:600px">
+@{
+    ViewData["Title"] = "Create Note";
+}
 
-        <h3 class="text-center mb-4">📝 Create New Note</h3>
+<div class="container mt-page">
+    <div class="form-card">
 
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <!-- Header -->
+        <div class="d-flex align-items-center gap-3 mb-5">
+            <div style="width:44px;height:44px;border-radius:var(--border-radius);background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;color:var(--color-primary);font-size:22px;flex-shrink:0;">
+                <i class="bi bi-journal-plus"></i>
+            </div>
+            <div>
+                <h3 class="mb-0" style="font-weight:800;">New Note</h3>
+                <p class="mb-0" style="font-size:var(--font-size-sm);color:var(--text-muted);">Capture your thoughts</p>
+            </div>
+        </div>
+
+        <form asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
 
             @Html.AntiForgeryToken()
-
-            <div asp-validation-summary="All" class="text-danger"></div>
-
-            @* <!-- Preview Image -->
-            <img id="preview" src="/imgs/default.png"
-                 class="img-fluid rounded mb-3"
-                 style="height:200px;object-fit:cover;" /> *@
+            <div asp-validation-summary="All" class="alert-danger mb-4"></div>
 
             <!-- Title -->
-            <div class="mb-3">
+            <div class="mb-4">
                 <label class="form-label">Title</label>
-                <input asp-for="Title" class="form-control" placeholder="Enter title..." />
+                <input asp-for="Title" class="form-control" placeholder="Give your note a title…" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
             <!-- Content -->
-            <div class="mb-3">
+            <div class="mb-4">
                 <label class="form-label">Content</label>
-                <textarea asp-for="Content" class="form-control" placeholder="Write your note..."></textarea>
+                <textarea asp-for="Content" class="form-control" rows="6"
+                          placeholder="Write your note here…" style="min-height:160px;"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 
-            <!-- Public -->
-            <div class="form-check mb-3">
-                <input class="form-check-input" asp-for="State" />
-                <label class="form-check-label">Make Public</label>
+            <!-- Visibility -->
+            <div class="mb-4 p-4 rounded" style="background:var(--bg-muted);border:1px solid var(--border-color);">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="State" />
+                    <label class="form-check-label">
+                        <strong>Make Public</strong>
+                        <span style="display:block;font-size:var(--font-size-xs);color:var(--text-muted);margin-top:2px;">
+                            Anyone with the link can see this note
+                        </span>
+                    </label>
+                </div>
             </div>
 
-            <!-- Upload Image -->
-            <div class="mb-3">
-                <label class="form-label">Upload Image</label>
-
-                <input type="file"
-                       asp-for="ImageFile"
-                       class="form-control"
-                       accept="image/*"
-                       onchange="previewImage(event)" />
+            <!-- Image upload -->
+            <div class="mb-5">
+                <label class="form-label">Attach Image <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                <input type="file" asp-for="ImageFile" class="form-control" accept="image/*"
+                       onchange="previewNoteImage(event)" />
+                <img id="noteImagePreview" src="" alt="Preview"
+                     class="note-image-preview d-none mt-3" />
             </div>
 
-            <!-- Buttons -->
-            <div class="d-flex justify-content-between">
-                <a asp-action="Index" class="btn btn-secondary">⬅ Back</a>
-                <button type="submit" class="btn btn-success">➕ Create</button>
+            <!-- Actions -->
+            <div class="d-flex justify-content-between align-items-center gap-3">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-lg me-1"></i>Create Note
+                </button>
             </div>
 
         </form>
-
     </div>
 </div>
 
 @section Scripts {
     <script>
-        function previewImage(event) {
-            var img = document.getElementById('preview');
-            img.src = URL.createObjectURL(event.target.files[0]);
+        function previewNoteImage(event) {
+            var preview = document.getElementById('noteImagePreview');
+            var file = event.target.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('d-none');
+            } else {
+                preview.src = '';
+                preview.classList.add('d-none');
+            }
         }
     </script>
-
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

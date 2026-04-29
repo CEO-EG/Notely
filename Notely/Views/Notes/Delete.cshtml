@@ -1,25 +1,42 @@
 @model Notely.Models.Note
 
-<div class="container mt-5">
-    <div class="card shadow p-4 mx-auto text-center" style="max-width:600px">
+@{
+    ViewData["Title"] = "Delete Note";
+}
 
-        <h3 class="text-danger mb-3">Delete Note</h3>
-        <p>Are you sure you want to delete this note?</p>
+<div class="container mt-page">
+    <div class="form-card text-center" style="max-width:520px;">
 
+        <!-- Warning icon -->
+        <div style="width:64px;height:64px;border-radius:var(--border-radius-full);background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-5);font-size:30px;color:var(--color-danger);">
+            <i class="bi bi-trash3-fill"></i>
+        </div>
+
+        <h3 style="font-weight:800;color:var(--color-danger);" class="mb-2">Delete Note?</h3>
+        <p style="color:var(--text-secondary);" class="mb-5">
+            This action is <strong>irreversible</strong>. The note will be permanently deleted.
+        </p>
+
+        <!-- Note preview -->
         @if (!string.IsNullOrEmpty(Model.ImagePath))
         {
-            <img src="@Model.ImagePath" class="img-fluid rounded mb-3" style="height:200px;object-fit:cover;" />
+            <img src="@Model.ImagePath" class="note-image-preview mb-4 mx-auto d-block" alt="@Model.Title" style="max-width:360px;" />
         }
 
-        <h5>@Model.Title</h5>
-        <p class="text-muted">@Model.Content</p>
+        <div class="p-4 mb-5 rounded text-start" style="background:var(--bg-muted);border:1px solid var(--border-color);">
+            <h6 class="mb-1" style="font-weight:700;">@Model.Title</h6>
+            <p class="mb-0" style="font-size:var(--font-size-sm);color:var(--text-secondary);">@Model.Content</p>
+        </div>
 
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" />
-
-            <div class="d-flex justify-content-between mt-4">
-                <a asp-action="Index" class="btn btn-secondary">⬅ Cancel</a>
-                <button type="submit" class="btn btn-danger">🗑 Delete</button>
+            <div class="d-flex justify-content-center gap-3">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Cancel
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash3 me-1"></i>Yes, Delete
+                </button>
             </div>
         </form>
 

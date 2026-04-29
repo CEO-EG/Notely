@@ -2,45 +2,65 @@
 
 @{
     ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 15px;">
-        
-        <h3 class="text-center mb-4">Welcome Back</h3>
+<div class="auth-page">
+    <div class="auth-card">
 
-        <form asp-action="Login" method="post">
-            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <!-- Logo -->
+        <div class="auth-logo">
+            <i class="bi bi-journal-bookmark-fill"></i>
+        </div>
+
+        <h3 class="text-center mb-1" style="font-weight:800;">Welcome Back</h3>
+        <p class="text-center mb-5" style="color:var(--text-muted);font-size:var(--font-size-sm);">
+            Sign in to access your notes
+        </p>
+
+        <form asp-action="Login" method="post" novalidate>
+            <div asp-validation-summary="All" class="alert-danger mb-4"></div>
 
             <!-- Email -->
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" placeholder="Enter email" />
+            <div class="mb-4">
+                <label asp-for="Email" class="form-label">Email address</label>
+                <div class="position-relative">
+                    <i class="bi bi-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="Email" class="form-control" placeholder="you@example.com"
+                           style="padding-left:40px;" autocomplete="email" />
+                </div>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <!-- Password -->
-            <div class="form-group mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" placeholder="Enter password" />
+            <div class="mb-4">
+                <label asp-for="Password" class="form-label">Password</label>
+                <div class="position-relative">
+                    <i class="bi bi-lock" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="Password" class="form-control" placeholder="••••••••"
+                           style="padding-left:40px;" autocomplete="current-password" />
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <!-- Remember Me -->
-            <div class="form-check mb-3">
+            <div class="form-check mb-5">
                 <input asp-for="RememberMe" class="form-check-input" />
-                <label asp-for="RememberMe" class="form-check-label"></label>
+                <label asp-for="RememberMe" class="form-check-label">Keep me signed in</label>
             </div>
 
-            <!-- Button -->
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary w-100 btn-lg mb-4">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+            </button>
 
-            <!-- Register Link -->
-            <div class="text-center mt-3">
-                <span>Don't have an account?</span>
-                <a asp-action="Register">Register</a>
-            </div>
+            <!-- Register link -->
+            <p class="text-center mb-0" style="font-size:var(--font-size-sm);color:var(--text-muted);">
+                Don&rsquo;t have an account?
+                <a asp-action="Register" style="font-weight:600;">Create one &rarr;</a>
+            </p>
         </form>
+
     </div>
 </div>
 
