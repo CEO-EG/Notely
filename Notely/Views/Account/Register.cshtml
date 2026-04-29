@@ -2,66 +2,90 @@
 
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 15px;">
-        
-        <h3 class="text-center mb-4">Create Account</h3>
+<div class="auth-page" style="align-items:flex-start;padding-top:var(--space-10);">
+    <div class="auth-card" style="max-width:480px;">
 
-        <form asp-action="Register" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <!-- Logo -->
+        <div class="auth-logo">
+            <i class="bi bi-person-plus-fill"></i>
+        </div>
 
-            <!-- First Name -->
-            <div class="form-group mb-3">
-                <label asp-for="FirstName" class="form-label"></label>
-                <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
+        <h3 class="text-center mb-1" style="font-weight:800;">Create Account</h3>
+        <p class="text-center mb-5" style="color:var(--text-muted);font-size:var(--font-size-sm);">
+            Join Notely and start organising your thoughts
+        </p>
 
-            <!-- Last Name -->
-            <div class="form-group mb-3">
-                <label asp-for="LastName" class="form-label"></label>
-                <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+        <form asp-action="Register" method="post" enctype="multipart/form-data" novalidate>
+            <div asp-validation-summary="All" class="alert-danger mb-4"></div>
+
+            <!-- Name row -->
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label asp-for="FirstName" class="form-label">First name</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Jane" autocomplete="given-name" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <label asp-for="LastName" class="form-label">Last name</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Doe" autocomplete="family-name" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
             </div>
 
             <!-- Email -->
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" placeholder="Enter email" />
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email address</label>
+                <div class="position-relative">
+                    <i class="bi bi-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="Email" class="form-control" placeholder="you@example.com"
+                           style="padding-left:40px;" autocomplete="email" />
+                </div>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <!-- profile image  -->
-            <div class="form-group mb-3">
-                <label>Profile Image</label>
-                <input type="file" name="ProfileImage" class="form-control" />
+
+            <!-- Profile image -->
+            <div class="mb-3">
+                <label class="form-label">Profile image <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                <input type="file" name="ProfileImage" class="form-control" accept="image/*" />
             </div>
 
-
             <!-- Password -->
-            <div class="form-group mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" placeholder="Enter password" />
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <div class="position-relative">
+                    <i class="bi bi-lock" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="Password" class="form-control" placeholder="••••••••"
+                           style="padding-left:40px;" autocomplete="new-password" />
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <!-- Confirm Password -->
-            <div class="form-group mb-3">
-                <label asp-for="ConfirmPassword" class="form-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm password" />
+            <div class="mb-5">
+                <label asp-for="ConfirmPassword" class="form-label">Confirm password</label>
+                <div class="position-relative">
+                    <i class="bi bi-lock-fill" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="••••••••"
+                           style="padding-left:40px;" autocomplete="new-password" />
+                </div>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
-            <!-- Button -->
-            <button type="submit" class="btn btn-primary w-100">Register</button>
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary w-100 btn-lg mb-4">
+                <i class="bi bi-person-check-fill me-2"></i>Create Account
+            </button>
 
-            <!-- Login Link -->
-            <div class="text-center mt-3">
-                <span>Already have an account?</span>
-                <a asp-action="Login">Login</a>
-            </div>
+            <!-- Login link -->
+            <p class="text-center mb-0" style="font-size:var(--font-size-sm);color:var(--text-muted);">
+                Already have an account?
+                <a asp-action="Login" style="font-weight:600;">Sign in &rarr;</a>
+            </p>
         </form>
+
     </div>
 </div>
 
