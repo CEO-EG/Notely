@@ -4,42 +4,66 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 15px;">
+<div class="d-flex justify-content-center align-items-center vh-100 bg-white">
+    
+    <div class="card p-4 shadow border-0" style="width:420px; border-radius:18px; background-color:white;">
         
-        <h3 class="text-center mb-4">Welcome Back</h3>
+        <!-- ICON -->
+        <div class="text-center mb-3">
+            <div class="d-inline-flex justify-content-center align-items-center"
+                 style="width:55px;height:55px;background:#0d6efd;border-radius:12px;color:white;font-size:22px;">
+                📁
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <h3 class="text-center fw-semibold">Welcome back</h3>
+        <p class="text-center text-muted mb-4">Sign in to access your notes</p>
 
         <form asp-action="Login" method="post">
+
             <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-            <!-- Email -->
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" placeholder="Enter email" />
+            <!-- EMAIL -->
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email Address</label>
+                <input asp-for="Email" class="form-control rounded-3"
+                       placeholder="you@example.com" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <!-- Password -->
-            <div class="form-group mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" placeholder="Enter password" />
+            <!-- PASSWORD -->
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password"
+                       class="form-control rounded-3"
+                       placeholder="Enter your password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <!-- Remember Me -->
+            <!-- REMEMBER -->
             <div class="form-check mb-3">
                 <input asp-for="RememberMe" class="form-check-input" />
-                <label asp-for="RememberMe" class="form-check-label"></label>
+                <label asp-for="RememberMe" class="form-check-label">Remember Me</label>
             </div>
 
-            <!-- Button -->
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-primary w-100 rounded-3">
+                Login
+            </button>
 
-            <!-- Register Link -->
+            <!-- LINKS -->
             <div class="text-center mt-3">
-                <span>Don't have an account?</span>
-                <a asp-action="Register">Register</a>
+                <span class="text-muted">Don't have an account?</span>
+                <a asp-action="Register" class="fw-semibold text-primary text-decoration-none">Register</a>
             </div>
+
+            <div class="text-center mt-2">
+                <a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none">
+                    ← Back to home
+                </a>
+            </div>
+
         </form>
     </div>
 </div>

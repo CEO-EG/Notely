@@ -1,4 +1,13 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿// Notely — site.js
 
-// Write your JavaScript code.
+// Auto-dismiss alerts after 4 seconds
+document.addEventListener('DOMContentLoaded', function () {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.transition = 'opacity .4s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 400);
+        }, 4000);
+    });
+});

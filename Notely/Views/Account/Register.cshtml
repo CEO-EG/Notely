@@ -4,63 +4,89 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 15px;">
-        
-        <h3 class="text-center mb-4">Create Account</h3>
+<div class="d-flex justify-content-center align-items-center vh-100 bg-white">
+
+    <div class="card p-4 shadow border-0" style="width:450px; border-radius:18px; background-color:white;">
+
+        <!-- ICON -->
+        <div class="text-center mb-3">
+            <div class="d-inline-flex justify-content-center align-items-center"
+                 style="width:55px;height:55px;background:#0d6efd;border-radius:12px;color:white;font-size:22px;">
+                📁
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <h3 class="text-center fw-semibold">Create account</h3>
+        <p class="text-center text-muted mb-4">Start capturing your ideas today</p>
 
         <form asp-action="Register" method="post" enctype="multipart/form-data">
+
             <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-            <!-- First Name -->
-            <div class="form-group mb-3">
-                <label asp-for="FirstName" class="form-label"></label>
-                <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+            <!-- FIRST + LAST NAME -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName" class="form-label">First name</label>
+                    <input asp-for="FirstName" class="form-control rounded-3"  />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName" class="form-label">Last name</label>
+                    <input asp-for="LastName" class="form-control rounded-3"  />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
             </div>
 
-            <!-- Last Name -->
-            <div class="form-group mb-3">
-                <label asp-for="LastName" class="form-label"></label>
-                <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-
-            <!-- Email -->
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" placeholder="Enter email" />
+            <!-- EMAIL -->
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" class="form-control rounded-3" placeholder="you@example.com" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <!-- profile image  -->
-            <div class="form-group mb-3">
-                <label>Profile Image</label>
-                <input type="file" name="ProfileImage" class="form-control" />
-            </div>
 
-
-            <!-- Password -->
-            <div class="form-group mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" placeholder="Enter password" />
+            <!-- PASSWORD -->
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password"
+                       class="form-control rounded-3"
+                       placeholder="Create a password (min 6 chars)" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <!-- Confirm Password -->
-            <div class="form-group mb-3">
-                <label asp-for="ConfirmPassword" class="form-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm password" />
+            <!-- CONFIRM PASSWORD -->
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label">Confirm password</label>
+                <input asp-for="ConfirmPassword" type="password"
+                       class="form-control rounded-3"
+                       placeholder="Repeat your password" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
-            <!-- Button -->
-            <button type="submit" class="btn btn-primary w-100">Register</button>
-
-            <!-- Login Link -->
-            <div class="text-center mt-3">
-                <span>Already have an account?</span>
-                <a asp-action="Login">Login</a>
+            <!-- PROFILE IMAGE -->
+            <div class="mb-3">
+                <label class="form-label">Profile photo (optional)</label>
+                <input type="file" name="ProfileImage" class="form-control rounded-3" />
             </div>
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-primary w-100 rounded-3">
+                Create account
+            </button>
+
+            <!-- LINKS -->
+            <div class="text-center mt-3">
+                <span class="text-muted">Already have an account?</span>
+                <a asp-action="Login" class="fw-semibold text-primary text-decoration-none">Login</a>
+            </div>
+
+            <div class="text-center mt-2">
+                <a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none">
+                    ← Back to home
+                </a>
+            </div>
+
         </form>
     </div>
 </div>

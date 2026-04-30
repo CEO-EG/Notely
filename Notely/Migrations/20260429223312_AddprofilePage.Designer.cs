@@ -12,8 +12,8 @@ using Notely.Models;
 namespace Notely.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260428153255_AddProfileImage")]
-    partial class AddProfileImage
+    [Migration("20260429223312_AddprofilePage")]
+    partial class AddprofilePage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

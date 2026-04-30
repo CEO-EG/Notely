@@ -20,6 +20,10 @@ namespace Notely.Controllers
             _env = env;
         }
 
+
+
+
+
         // GET: Notes
         public async Task<IActionResult> Index(string? search)
         {
@@ -84,10 +88,6 @@ namespace Notely.Controllers
         {
             note.UserId = _userManager.GetUserId(User);
             note.CreatedAt = DateTime.Now;
-
-            //ModelState.Remove("UserId");
-            //ModelState.Remove("CreatedAt");
-            //ModelState.Remove("ImagePath");
 
             if (!ModelState.IsValid)
                 return View(note);
