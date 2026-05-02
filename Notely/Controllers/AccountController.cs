@@ -156,6 +156,22 @@ namespace Notely.Controllers
 
             if (model.ProfileImage != null)
             {
+                var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/webp" };
+                if (!allowedTypes.Contains(model.ProfileImage.ContentType.ToLowerInvariant()))
+                {
+                    ModelState.AddModelError("ProfileImage", "Only JPEG, PNG, GIF, or WebP images are allowed.");
+                    model.ProfileImagePath = user.ProfileImagepath;
+                    return View("Profile", model);
+                }
+
+                const long maxFileSize = 5 * 1024 * 1024; // 5 MB
+                if (model.ProfileImage.Length > maxFileSize)
+                {
+                    ModelState.AddModelError("ProfileImage", "Image must be smaller than 5 MB.");
+                    model.ProfileImagePath = user.ProfileImagepath;
+                    return View("Profile", model);
+                }
+
                 var uploadsFolder = Path.Combine(_env.WebRootPath, "imgs");
 
                 if (!Directory.Exists(uploadsFolder))
