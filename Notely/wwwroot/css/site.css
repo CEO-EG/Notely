@@ -6,3 +6,6 @@
 
 /* Ensure Bootstrap's .text-danger uses the CSS variable */
 .text-danger { color: var(--color-danger) !important; }
+
+/* Hide empty validation summary (renders even when no errors) */
+.validation-summary-valid { display: none !important; }

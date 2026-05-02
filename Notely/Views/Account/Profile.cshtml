@@ -1,0 +1,105 @@
+@model Notely.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var firstName = Model.Fullname?.Split(' ')[0];
+}
+
+<div class="container profile-page">
+
+    <!-- Profile header banner -->
+    <div class="profile-header-card">
+        <img src="@(Model.ProfileImagePath ?? "/imgs/default.png")"
+             class="profile-avatar-lg" alt="@Model.Fullname" />
+        <h3>@Model.Fullname</h3>
+        <p><i class="bi bi-envelope me-1"></i>@Model.Email</p>
+    </div>
+
+    <div class="row g-5 justify-content-center">
+
+        <!-- Edit Profile form -->
+        <div class="col-12 col-lg-7">
+            <div class="form-card">
+                <h5 class="mb-1 fw-700">Edit Profile</h5>
+                <p class="mb-5" style="font-size:var(--font-size-sm);color:var(--text-muted);">
+                    Update your display name and profile picture.
+                </p>
+
+                <form asp-action="EditProfile" method="post" enctype="multipart/form-data" novalidate>
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="alert-danger mb-4"></div>
+
+                    <!-- Hidden: preserve current image path if no new upload -->
+                    <input type="hidden" asp-for="ProfileImagePath" />
+                    <input type="hidden" asp-for="Email" />
+
+                    <!-- Full name -->
+                    <div class="mb-4">
+                        <label asp-for="Fullname" class="form-label">Full name</label>
+                        <div class="position-relative">
+                            <i class="bi bi-person" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                            <input asp-for="Fullname" class="form-control" placeholder="Jane Doe"
+                                   style="padding-left:40px;" autocomplete="name" />
+                        </div>
+                        <span asp-validation-for="Fullname" class="text-danger"></span>
+                    </div>
+
+                    <!-- Profile image -->
+                    <div class="mb-5">
+                        <label class="form-label">
+                            Profile picture
+                            <span style="color:var(--text-muted);font-weight:400;">(optional — leave blank to keep current)</span>
+                        </label>
+                        <input type="file" name="ProfileImage" class="form-control" accept="image/*" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill me-2"></i>Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Account info sidebar -->
+        <div class="col-12 col-lg-4">
+            <div class="form-card">
+                <h5 class="mb-1 fw-700">Account Info</h5>
+                <p class="mb-4" style="font-size:var(--font-size-sm);color:var(--text-muted);">
+                    Your account details.
+                </p>
+
+                <div class="mb-3">
+                    <span class="form-label d-block">Email address</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-envelope" style="color:var(--color-primary);"></i>
+                        <span style="font-size:var(--font-size-sm);color:var(--text-secondary);">@Model.Email</span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div>
+                    <span class="form-label d-block mb-3">Quick links</span>
+                    <a asp-controller="Notes" asp-action="Index" class="btn btn-secondary w-100 mb-2">
+                        <i class="bi bi-journals me-2"></i>My Notes
+                    </a>
+                    <a asp-controller="Notes" asp-action="Create" class="btn btn-secondary w-100 mb-2">
+                        <i class="bi bi-plus-circle me-2"></i>New Note
+                    </a>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="mt-3">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            <i class="bi bi-box-arrow-right me-2"></i>Sign Out
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

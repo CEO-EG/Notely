@@ -1,6 +1,7 @@
 ﻿using Notely.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Notely.Controllers
 {
@@ -126,5 +127,64 @@ namespace Notely.Controllers
 
     
         public IActionResult AccessDenied() => View();
+
+        [HttpGet, Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            var model = new ProfileViewModel
+            {
+                Fullname = user.Fullname,
+                Email = user.Email,
+                ProfileImagePath = user.ProfileImagepath,
+            };
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, Authorize]
+        public async Task<IActionResult> EditProfile(ProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View("Profile", model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            user.Fullname = model.Fullname;
+
+            if (model.ProfileImage != null)
+            {
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "imgs");
+
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ProfileImage.FileName);
+                var fullPath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await model.ProfileImage.CopyToAsync(stream);
+                }
+
+                user.ProfileImagepath = "/imgs/" + fileName;
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["Toast"] = "Profile updated successfully! ✅";
+                return RedirectToAction("Profile");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
+            model.ProfileImagePath = user.ProfileImagepath;
+            return View("Profile", model);
+        }
     }
 }
