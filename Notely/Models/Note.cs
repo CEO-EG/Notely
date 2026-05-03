@@ -24,7 +24,7 @@ namespace Notely.Models
         public IFormFile? ImageFile { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string UserId{ get; set; }
+        public string? UserId{ get; set; }
 
         [ForeignKey(nameof(UserId))]
         public ApplicationUser? User { get; set; }

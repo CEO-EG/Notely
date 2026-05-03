@@ -86,11 +86,17 @@ namespace Notely.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Note note)
         {
+            // 🔥 ربط النوت بالمستخدم الحالي
             note.UserId = _userManager.GetUserId(User);
+
+            // 🔥 تاريخ الإنشاء
             note.CreatedAt = DateTime.Now;
+
 
             if (!ModelState.IsValid)
                 return View(note);
+
+            // 🔥 رفع الصورة
             if (note.ImageFile != null)
             {
                 var folder = Path.Combine(_env.WebRootPath, "imgs");
@@ -98,7 +104,8 @@ namespace Notely.Controllers
                 if (!Directory.Exists(folder))
                     Directory.CreateDirectory(folder);
 
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(note.ImageFile.FileName);
+                var fileName = Guid.NewGuid().ToString()
+                               + Path.GetExtension(note.ImageFile.FileName);
 
                 var fullPath = Path.Combine(folder, fileName);
 
@@ -110,7 +117,9 @@ namespace Notely.Controllers
                 note.ImagePath = "/imgs/" + fileName;
             }
 
-            _context.Add(note);
+            // 🔥 حفظ النوت
+            _context.Notes.Add(note);
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
