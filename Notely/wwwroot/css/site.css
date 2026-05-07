@@ -1,22 +1,44 @@
 
-h1 {
-    font-size: 2.5rem;
+/* site.css — Project-level overrides (supplemental to theme/components/responsive) */
+
+/* Bootstrap override: use themed colors for text-muted */
+/* Form card */
+.form-card {
+    border: 1px solid rgba(255,255,255,0.12);
 }
 
-.shadow-sm {
-    transition: 0.3s;
+/* Content box */
+.note-content-box {
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    background: #1b2740;
 }
 
-    .shadow-sm:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-.note-card {
-    border-radius: 12px;
-    transition: 0.2s ease;
+/* Image preview */
+.note-image-preview {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 6px;
+    background: #1b2740;
 }
 
-    .note-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
+/* Inputs */
+.form-control {
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    background: #1b2740 !important;
+    color: white !important;
+}
+
+/* Buttons */
+.btn {
+    border-width: 1px !important;
+}
+.text-muted { color: var(--text-muted) !important; }
+
+/* Ensure Bootstrap's .text-danger uses the CSS variable */
+.text-danger { color: var(--color-danger) !important; }
+
+/* Hide empty validation summary (renders even when no errors) */
+.validation-summary-valid { display: none !important; }

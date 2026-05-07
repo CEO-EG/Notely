@@ -2,71 +2,105 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="container mt-4">
+<!-- ── Hero ──────────────────────────────────────────────────────── -->
+<section class="hero-section home-hero">
+    <div class="container">
+        <div class="hero-badge mb-4">
+            <i class="bi bi-stars me-1"></i> Your personal note space
+        </div>
+        <h1>Capture Every<br><span class="hero-highlight">Brilliant Idea</span></h1>
+        <p class="hero-sub">
+            Save, organise, and access your notes from anywhere.<br>
+            Keep your thoughts beautifully structured with Notely.
+        </p>
 
-    
-    <div class="text-center mb-5">
-        <h1 class="fw-bold">Welcome to Notely 📝</h1>
-        <p class="text-muted">Save your notes, organize your ideas, and access them anytime.</p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center mt-4">
+            <a asp-controller="Notes" asp-action="Create" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle-fill me-2"></i>Create New Note
+            </a>
+            <a asp-controller="Notes" asp-action="Index" class="btn btn-secondary btn-lg">
+                <i class="bi bi-journals me-2"></i>View My Notes
+            </a>
+        </div>
+    </div>
+</section>
 
-        <a asp-controller="Notes" asp-action="Create" class="btn btn-primary btn-lg mt-3">
-            ➕ Create New Note
+<!-- ── Features ──────────────────────────────────────────────────── -->
+<section class="container mb-5">
+    <div class="section-label text-center mb-5">
+        <span class="section-tag">What you get</span>
+        <h2 class="section-title">Everything you need,<br>nothing you don't</h2>
+    </div>
+
+    <div class="feature-grid">
+
+        <a asp-controller="Notes" asp-action="Index" class="feature-card">
+            <div class="feature-icon feature-icon-primary">
+                <i class="bi bi-pin-angle-fill"></i>
+            </div>
+            <h5 class="mb-2">Organise</h5>
+            <p class="mb-0" style="font-size:var(--font-size-sm);">Keep all your notes in one tidy place, always at your fingertips.</p>
         </a>
-    </div>
 
-   
-    <div class="row text-center mb-5">
-
-        
-        <div class="col-md-4">
-            <a asp-controller="Notes" asp-action="Index" class="text-decoration-none text-dark">
-                <div class="p-4 shadow-sm rounded bg-light card-hover">
-                    <h5>📌 Organize</h5>
-                    <p>Keep all your notes in one place.</p>
-                </div>
-            </a>
-        </div>
-
-        
-        <div class="col-md-4">
-            <a asp-controller="Notes" asp-action="Private" class="text-decoration-none text-dark">
-                <div class="p-4 shadow-sm rounded bg-light card-hover">
-                    <h5>🔒 Private</h5>
-                    <p>Your notes are secure and private.</p>
-                </div>
-            </a>
-        </div>
-
-       
-        <div class="col-md-4">
-            <a asp-controller="Notes" asp-action="Public" class="text-decoration-none text-dark">
-                <div class="p-4 shadow-sm rounded bg-light card-hover">
-                    <h5>🌍 Public Notes</h5>
-                    <p>Share notes with others if you want.</p>
-                </div>
-            </a>
-        </div>
-
-    </div>
-
-   
-    <div class="text-center">
-        <a asp-controller="Notes" asp-action="Index" class="btn btn-outline-dark">
-            📂 View My Notes
+        <a asp-controller="Notes" asp-action="Index" class="feature-card">
+            <div class="feature-icon feature-icon-success">
+                <i class="bi bi-shield-lock-fill"></i>
+            </div>
+            <h5 class="mb-2">Private</h5>
+            <p class="mb-0" style="font-size:var(--font-size-sm);">Your notes stay secure and private — visible only to you.</p>
         </a>
+
+        <a asp-controller="Notes" asp-action="Index" class="feature-card">
+            <div class="feature-icon feature-icon-accent">
+                <i class="bi bi-globe2"></i>
+            </div>
+            <h5 class="mb-2">Share Publicly</h5>
+            <p class="mb-0" style="font-size:var(--font-size-sm);">Optionally publish notes so anyone can read your ideas.</p>
+        </a>
+
     </div>
+</section>
 
-</div>
+<!-- ── How it works ───────────────────────────────────────────────── -->
+<section class="how-it-works-section">
+    <div class="container">
+        <div class="section-label text-center mb-5">
+            <span class="section-tag">Simple by design</span>
+            <h2 class="section-title">Up and running<br>in seconds</h2>
+        </div>
 
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-number">01</div>
+                <h5>Create an account</h5>
+                <p>Sign up for free in under a minute — no credit card required.</p>
+            </div>
+            <div class="step-divider"><i class="bi bi-arrow-right"></i></div>
+            <div class="step-item">
+                <div class="step-number">02</div>
+                <h5>Write your notes</h5>
+                <p>Jot down ideas, to-dos, or long-form thoughts with a simple editor.</p>
+            </div>
+            <div class="step-divider"><i class="bi bi-arrow-right"></i></div>
+            <div class="step-item">
+                <div class="step-number">03</div>
+                <h5>Access anywhere</h5>
+                <p>Your notes are always available from any device, any time.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-<style>
-    .card-hover {
-        transition: 0.3s;
-        cursor: pointer;
-    }
-
-        .card-hover:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-</style>
+<!-- ── CTA ────────────────────────────────────────────────────────── -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-card">
+            <i class="bi bi-journal-bookmark-fill cta-icon"></i>
+            <h2 class="mb-3">Ready to get started?</h2>
+            <p class="mb-5">Join thousands of people who use Notely to capture their best ideas.</p>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">
+                <i class="bi bi-person-plus-fill me-2"></i>Get started for free
+            </a>
+        </div>
+    </div>
+</section>

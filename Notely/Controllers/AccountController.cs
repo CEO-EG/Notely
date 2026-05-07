@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Notely.Models;
-
 namespace Notely.Controllers
 {
     public class AccountController : Controller
@@ -56,7 +57,7 @@ namespace Notely.Controllers
             var user = new ApplicationUser
             {
                 
-                Fullname = model.FirstName + " " + model.LastName,
+                FullName = model.FirstName + " " + model.LastName,
                 UserName = model.Email,
                 Email = model.Email,
                 EmailConfirmed = true,
@@ -145,7 +146,7 @@ namespace Notely.Controllers
 
             var model = new ProfileViewModel
             {
-                FullName = user.Fullname,
+                FullName = user.FullName,
                 Email = user.Email,
                 ProfileImagePath = user.ProfileImagepath,
                 Notes = notes
@@ -163,7 +164,7 @@ namespace Notely.Controllers
                 return RedirectToAction("Login");
 
             // Update basic info
-            user.Fullname = Fullname;
+            user.FullName = Fullname;
             user.Email = Email;
             user.UserName = Email;
 
@@ -191,7 +192,73 @@ namespace Notely.Controllers
             return RedirectToAction("Profile");
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return RedirectToAction("Login");
+
+            string userId = user.Id.ToString();
+
+            // get all user notes
+            var notes = _context.Notes
+                .Where(n => n.UserId == userId)
+                .ToList();
+
+            // delete note images
+            foreach (var note in notes)
+            {
+                if (!string.IsNullOrEmpty(note.ImagePath))
+                {
+                    var imagePath = Path.Combine(
+                        _env.WebRootPath,
+                        note.ImagePath.TrimStart('/')
+                    );
+
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+            }
+
+            // delete notes
+            _context.Notes.RemoveRange(notes);
+
+            await _context.SaveChangesAsync();
+
+            // delete profile image
+            if (!string.IsNullOrEmpty(user.ProfileImagepath))
+            {
+                var profilePath = Path.Combine(
+                    _env.WebRootPath,
+                    user.ProfileImagepath.TrimStart('/')
+                );
+
+                if (System.IO.File.Exists(profilePath))
+                {
+                    System.IO.File.Delete(profilePath);
+                }
+            }
+
+            // logout user
+            await _signInManager.SignOutAsync();
+
+            // delete user directly from AspNetUsers
+            _context.Users.Remove(user);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
         public IActionResult AccessDenied() => View();
+
 
 
 

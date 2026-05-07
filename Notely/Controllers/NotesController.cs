@@ -212,9 +212,6 @@ namespace Notely.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool NoteExists(int id)
-        {
-            return _context.Notes.Any(e => e.Id == id);
-        }
+        
     }
 }

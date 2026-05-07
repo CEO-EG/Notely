@@ -2,92 +2,93 @@
 
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="d-flex justify-content-center align-items-center vh-100 bg-white">
+<div class="auth-page" style="align-items:flex-start;padding-top:var(--space-10);">
+    <div class="auth-card" style="max-width:480px;">
 
-    <div class="card p-4 shadow border-0" style="width:450px; border-radius:18px; background-color:white;">
-
-        <!-- ICON -->
-        <div class="text-center mb-3">
-            <div class="d-inline-flex justify-content-center align-items-center"
-                 style="width:55px;height:55px;background:#0d6efd;border-radius:12px;color:white;font-size:22px;">
-                📁
-            </div>
+        <!-- Logo -->
+        <div class="auth-logo">
+            <i class="bi bi-person-plus-fill"></i>
         </div>
 
-        <!-- TITLE -->
-        <h3 class="text-center fw-semibold">Create account</h3>
-        <p class="text-center text-muted mb-4">Start capturing your ideas today</p>
+        <h3 class="text-center mb-1" style="font-weight:800;">Create Account</h3>
+        <p class="text-center mb-5" style="color:var(--text-muted);font-size:var(--font-size-sm);">
+            Join Notely and start organising your thoughts
+        </p>
 
-        <form asp-action="Register" method="post" enctype="multipart/form-data">
+        <form asp-action="Register" method="post" enctype="multipart/form-data" novalidate>
+            <div asp-validation-summary="All" class="alert-danger mb-4"></div>
 
-            <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
-            <!-- FIRST + LAST NAME -->
-            <div class="row">
-                <div class="col-md-6 mb-3">
+            <!-- Name row -->
+            <div class="row g-3 mb-3">
+                <div class="col-6">
                     <label asp-for="FirstName" class="form-label">First name</label>
-                    <input asp-for="FirstName" class="form-control rounded-3"  />
+                    <input asp-for="FirstName" class="form-control" placeholder="Jane" autocomplete="given-name" />
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
-
-                <div class="col-md-6 mb-3">
+                <div class="col-6">
                     <label asp-for="LastName" class="form-label">Last name</label>
-                    <input asp-for="LastName" class="form-control rounded-3"  />
+                    <input asp-for="LastName" class="form-control" placeholder="Doe" autocomplete="family-name" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
 
-            <!-- EMAIL -->
+            <!-- Email -->
             <div class="mb-3">
-                <label asp-for="Email" class="form-label">Email</label>
-                <input asp-for="Email" class="form-control rounded-3" placeholder="you@example.com" />
+                <label asp-for="Email" class="form-label">Email address</label>
+                <div class="position-relative">
+                    <i class="bi bi-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="Email" class="form-control" placeholder="you@example.com"
+                           style="padding-left:40px;" autocomplete="email" />
+                </div>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <!-- PASSWORD -->
+            <!-- Profile image -->
+            <div class="mb-3">
+                <label class="form-label">Profile image <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                <input type="file" name="ProfileImage" class="form-control" accept="image/*" />
+            </div>
+
+            <!-- Password -->
             <div class="mb-3">
                 <label asp-for="Password" class="form-label">Password</label>
-                <input asp-for="Password" type="password"
-                       class="form-control rounded-3"
-                       placeholder="Create a password (min 6 chars)" />
+                <div class="position-relative">
+                    <i class="bi bi-lock" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="Password" class="form-control" placeholder="••••••••"
+                           style="padding-left:40px;" autocomplete="new-password" />
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <!-- CONFIRM PASSWORD -->
-            <div class="mb-3">
+            <!-- Confirm Password -->
+            <div class="mb-5">
                 <label asp-for="ConfirmPassword" class="form-label">Confirm password</label>
-                <input asp-for="ConfirmPassword" type="password"
-                       class="form-control rounded-3"
-                       placeholder="Repeat your password" />
+                <div class="position-relative">
+                    <i class="bi bi-lock-fill" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="••••••••"
+                           style="padding-left:40px;" autocomplete="new-password" />
+                </div>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
-            <!-- PROFILE IMAGE -->
-            <div class="mb-3">
-                <label class="form-label">Profile photo (optional)</label>
-                <input type="file" name="ProfileImage" class="form-control rounded-3" />
-            </div>
-
-            <!-- BUTTON -->
-            <button type="submit" class="btn btn-primary w-100 rounded-3">
-                Create account
+            <!-- Submit -->
+            <div class="d-grid mt-1">
+            <button type="submit" class="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center gap-2">
+                <i class="bi bi-person-plus"></i>
+                <span>Create Account</span>
             </button>
-
-            <!-- LINKS -->
-            <div class="text-center mt-3">
-                <span class="text-muted">Already have an account?</span>
-                <a asp-action="Login" class="fw-semibold text-primary text-decoration-none">Login</a>
             </div>
 
-            <div class="text-center mt-2">
-                <a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none">
-                    ← Back to home
-                </a>
-            </div>
-
+            <!-- Login link -->
+            <p class="text-center mb-0" style="font-size:var(--font-size-sm);color:var(--text-muted);">
+                Already have an account?
+                <a asp-action="Login" style="font-weight:600;">Sign in &rarr;</a>
+            </p>
         </form>
+
     </div>
 </div>
 
