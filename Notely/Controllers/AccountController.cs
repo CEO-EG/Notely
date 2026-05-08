@@ -71,6 +71,13 @@ namespace Notely.Controllers
               
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                HttpContext.Session.SetString("UserId", user.Id.ToString());
+
+                HttpContext.Session.SetString("UserName", user.FullName ?? "");
+
+                HttpContext.Session.SetString("UserEmail", user.Email ?? "");
+
+
 
                 TempData["Toast"] = "Welcome to Notely! 🎉";
 
@@ -110,8 +117,11 @@ namespace Notely.Controllers
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     return Redirect(returnUrl);
 
-                var user = await _userManager.FindByEmailAsync(model.Email);
-               
+                var user = await _userManager.GetUserAsync(User);
+                HttpContext.Session.SetString("UserId", user.Id.ToString());
+                HttpContext.Session.SetString("UserName", user.FullName);
+                HttpContext.Session.SetString("UserEmail", user.Email);
+
 
 
                 return RedirectToAction("Index", "Notes");
@@ -125,6 +135,7 @@ namespace Notely.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
+            HttpContext.Session.Clear();
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
@@ -137,6 +148,7 @@ namespace Notely.Controllers
             {
                 return RedirectToAction("Login");
             }
+            ViewBag.SessionName = HttpContext.Session.GetString("UserName");
 
             var userId = _userManager.GetUserId(User);
 
@@ -188,6 +200,8 @@ namespace Notely.Controllers
             }
 
             await _userManager.UpdateAsync(user);
+            HttpContext.Session.SetString("UserName", user.FullName);
+            HttpContext.Session.SetString("UserEmail", user.Email);
 
             return RedirectToAction("Profile");
         }
@@ -247,6 +261,7 @@ namespace Notely.Controllers
             }
 
             // logout user
+            HttpContext.Session.Clear();
             await _signInManager.SignOutAsync();
 
             // delete user directly from AspNetUsers
