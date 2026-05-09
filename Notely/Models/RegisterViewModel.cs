@@ -26,8 +26,8 @@ public class RegisterViewModel
 
     [Required]
     [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
-    [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$",
-        ErrorMessage = "Password must contain letters and numbers.")]
+    [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d).{6,}$",
+        ErrorMessage = "Password must contain letters, numbers.")]
     [DataType(DataType.Password)]
     public string Password { get; set; } = string.Empty;
 

@@ -4,29 +4,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notely.Models
 {
-    public class ApplicationUser :IdentityUser
+    public class ApplicationUser : IdentityUser<int>
     {
-
-        [Key]
-        public int Id { get; set; } 
         [Required]
-        [MaxLength(100)]
-        [Display(Name = "Full Name")]
-
-        public string FullName { get; set; } = string.Empty;
-
+        [MaxLength(30)]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; } = string.Empty;
 
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }= string.Empty;
+        [MaxLength(30)]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; } = string.Empty;
 
-        public DateTime Created_at { get; set; }
+        public DateTime Created_at { get; set; } = DateTime.Now;
 
         [MaxLength(300)]
         public string? ProfileImagepath { get; set; }
 
-        [NotMapped]
-        public IFormFile? ImageFile { get; set; }
         public ICollection<Note> Notes { get; set; } = new List<Note>();
     }
 }

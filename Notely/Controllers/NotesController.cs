@@ -13,7 +13,7 @@ namespace Notely.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public NotesController(AppDbContext context, UserManager<ApplicationUser> userManager , IWebHostEnvironment env)
+        public NotesController(AppDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment env)
         {
             _context = context;
             _userManager = userManager;
@@ -21,16 +21,26 @@ namespace Notely.Controllers
         }
 
 
+        private int? GetCurrentUserId()
+        {
+            var userIdString = _userManager.GetUserId(User);
 
+            if (int.TryParse(userIdString, out int parsedId))
+            {
+                return parsedId;
+            }
+
+            return null;
+        }
 
 
         // GET: Notes
         public async Task<IActionResult> Index(string? search)
         {
-            var userId = _userManager.GetUserId(User);
+            int? userId = GetCurrentUserId();
 
             var notes = _context.Notes
-                .Where(n => n.UserId == userId || n.State);
+                .Where(n => n.UserId == userId);
             if (!string.IsNullOrEmpty(search))
             {
                 notes = notes.Where(n => n.Title.Contains(search));
@@ -38,9 +48,10 @@ namespace Notely.Controllers
 
             return View(await notes.ToListAsync());
         }
+
         public async Task<IActionResult> Private()
         {
-            var userId = _userManager.GetUserId(User);
+            int? userId = GetCurrentUserId();
 
             var notes = await _context.Notes
                 .Where(n => n.UserId == userId && !n.State)
@@ -67,9 +78,12 @@ namespace Notely.Controllers
                 .Include(n => n.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            var userId = _userManager.GetUserId(User);
+            if (note == null)
+                return NotFound();
 
-            if (note == null || (note.UserId != userId && !note.State))
+            int? userId = GetCurrentUserId();
+
+            if (note.UserId != userId && !note.State)
                 return Unauthorized();
 
             return View(note);
@@ -86,17 +100,15 @@ namespace Notely.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Note note)
         {
-            // 🔥 ربط النوت بالمستخدم الحالي
-            note.UserId = _userManager.GetUserId(User);
+            int? userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized();
 
-            // 🔥 تاريخ الإنشاء
-            note.CreatedAt = DateTime.Now;
-
+            note.UserId = (int)userId;
 
             if (!ModelState.IsValid)
                 return View(note);
 
-            // 🔥 رفع الصورة
             if (note.ImageFile != null)
             {
                 var folder = Path.Combine(_env.WebRootPath, "imgs");
@@ -117,7 +129,6 @@ namespace Notely.Controllers
                 note.ImagePath = "/imgs/" + fileName;
             }
 
-            // 🔥 حفظ النوت
             _context.Notes.Add(note);
 
             await _context.SaveChangesAsync();
@@ -131,9 +142,11 @@ namespace Notely.Controllers
             if (id == null) return NotFound();
 
             var note = await _context.Notes.FindAsync(id);
-            var userId = _userManager.GetUserId(User);
+            var userId = GetCurrentUserId();
 
-            if (note == null || note.UserId != userId)
+            if (note == null) return NotFound();
+
+            if (userId == null || note.UserId != userId)
                 return Unauthorized();
 
             return View(note);
@@ -147,9 +160,11 @@ namespace Notely.Controllers
             if (id != note.Id) return NotFound();
 
             var existingNote = await _context.Notes.FindAsync(id);
-            var userId = _userManager.GetUserId(User);
+            var userId = GetCurrentUserId();
 
-            if (existingNote == null || existingNote.UserId != userId)
+            if (existingNote == null) return NotFound();
+
+            if (userId == null || existingNote.UserId != userId)
                 return Unauthorized();
 
             if (ModelState.IsValid)
@@ -159,6 +174,25 @@ namespace Notely.Controllers
                 existingNote.State = note.State;
                 if (note.ImageFile != null)
                 {
+
+                    Console.WriteLine("#######################################");
+                    if (!string.IsNullOrEmpty(existingNote.ImagePath))
+                    {
+                        var oldImagePath = Path.Combine(
+                            _env.WebRootPath,
+                            existingNote.ImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+                        );
+                        
+                        Console.WriteLine(oldImagePath);
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+                    Console.WriteLine("#######################################");
+
+
                     string uploadsFolder = Path.Combine(_env.WebRootPath, "imgs");
 
                     
@@ -187,9 +221,11 @@ namespace Notely.Controllers
             if (id == null) return NotFound();
 
             var note = await _context.Notes.FindAsync(id);
-            var userId = _userManager.GetUserId(User);
+            var userId = GetCurrentUserId();
 
-            if (note == null || note.UserId != userId)
+            if (note == null) return NotFound();
+
+            if (userId == null || note.UserId != userId)
                 return Unauthorized();
 
             return View(note);
@@ -201,10 +237,25 @@ namespace Notely.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var note = await _context.Notes.FindAsync(id);
-            var userId = _userManager.GetUserId(User);
+            var userId = GetCurrentUserId();
 
-            if (note == null || note.UserId != userId)
+            if (note == null) return NotFound();
+
+            if (userId == null || note.UserId != userId)
                 return Unauthorized();
+
+            if (!string.IsNullOrEmpty(note.ImagePath))
+            {
+                var oldImagePath = Path.Combine(
+                    _env.WebRootPath,
+                    note.ImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+                );
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
 
             _context.Notes.Remove(note);
             await _context.SaveChangesAsync();

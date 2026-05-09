@@ -35,6 +35,25 @@
 .btn {
     border-width: 1px !important;
 }
+
+/* reduce spaces inside login card */
+
+.login-card .form-group,
+.login-card .mb-4,
+.login-card .mb-5 {
+    margin-bottom: 18px !important;
+}
+
+/* move sign in button upward */
+.login-card .btn-primary {
+    margin-top: 10px !important;
+}
+
+/* reduce checkbox spacing */
+.login-card .form-check {
+    margin-bottom: 16px !important;
+}
+
 .text-muted { color: var(--text-muted) !important; }
 
 /* Ensure Bootstrap's .text-danger uses the CSS variable */

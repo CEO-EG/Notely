@@ -3,10 +3,11 @@
 @{
     ViewData["Title"] = "Note Details";
 
-    var currentUserId =
-    User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+  
+    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-    bool isOwner = Model.UserId == currentUserId;
+    bool isOwner = currentUserId != null &&
+                   Model.UserId == int.Parse(currentUserId);
 }
 
 <div class="container mt-page">

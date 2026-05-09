@@ -1,8 +1,7 @@
 ﻿@model Notely.Models.LoginViewModel;
 
 @{
-    ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Login";;
 }
 
 <div class="auth-page">
@@ -14,7 +13,7 @@
         </div>
 
         <h3 class="text-center mb-1" style="font-weight:800;">Welcome Back</h3>
-        <p class="text-center mb-5" style="color:var(--text-muted);font-size:var(--font-size-sm);">
+        <p class="text-center mb-4" style="color:var(--text-muted);font-size:var(--font-size-sm);">
             Sign in to access your notes
         </p>
 
@@ -44,7 +43,7 @@
             </div>
 
             <!-- Remember Me -->
-            <div class="form-check mb-5">
+            <div class="form-check mb-3">
                 <input asp-for="RememberMe" class="form-check-input" />
                 <label asp-for="RememberMe" class="form-check-label">Keep me signed in</label>
             </div>
@@ -58,7 +57,7 @@
             </div>
 
             <!-- Register link -->
-            <p class="text-center mb-0" style="font-size:var(--font-size-sm);color:var(--text-muted);">
+            <p class="text-center mb-2" style="font-size:var(--font-size-sm);color:var(--text-muted);">
                 Don&rsquo;t have an account?
                 <a asp-action="Register" style="font-weight:600;">Create one &rarr;</a>
             </p>

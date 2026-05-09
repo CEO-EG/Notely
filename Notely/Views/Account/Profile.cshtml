@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "My Profile";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container profile-page">
@@ -10,11 +9,11 @@
     <!-- Profile Header -->
     <div class="profile-header-card">
 
-        <img src="@(Model.ProfileImagePath ?? "/imgs/default.png")"
+        <img src="@(Model.ProfileImagePath ?? "/imgs/default.jpg")"
              class="profile-avatar-lg"
-             alt="@Model.FullName" />
+             alt="@Model.FirstName @Model.LastName" />
 
-        <h3>@Model.FullName</h3>
+        <h3>@Model.FirstName @Model.LastName</h3>
 
         <p>
             <i class="bi bi-envelope me-1"></i>
@@ -82,12 +81,12 @@
                     <input type="hidden" asp-for="ProfileImagePath" />
                     <input type="hidden" asp-for="Email" />
 
-                    <!-- Full Name -->
+                    <!-- First Name -->
                     <div class="mb-4">
 
-                        <label asp-for="FullName"
+                        <label asp-for="FirstName"
                                class="form-label">
-                            Full Name
+                            First Name
                         </label>
 
                         <div class="position-relative">
@@ -101,14 +100,45 @@
                                 pointer-events:none;">
                             </i>
 
-                            <input asp-for="FullName"
+                            <input asp-for="FirstName"
                                    class="form-control"
                                    style="padding-left:40px;"
                                    autocomplete="name" />
 
                         </div>
 
-                        <span asp-validation-for="FullName"
+                        <span asp-validation-for="FirstName"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="mb-4">
+
+                        <label asp-for="LastName"
+                               class="form-label">
+                            Last Name
+                        </label>
+
+                        <div class="position-relative">
+
+                            <i class="bi bi-person"
+                                   style="position:absolute;
+                                left:14px;
+                                top:50%;
+                                transform:translateY(-50%);
+                                color:var(--text-muted);
+                                pointer-events:none;">
+                            </i>
+
+                            <input asp-for="LastName"
+                                   class="form-control"
+                                   style="padding-left:40px;"
+                                   autocomplete="name" />
+
+                        </div>
+
+                        <span asp-validation-for="LastName"
                               class="text-danger"></span>
 
                     </div>

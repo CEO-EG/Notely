@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Register";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="auth-page" style="align-items:flex-start;padding-top:var(--space-10);">
@@ -14,7 +13,7 @@
         </div>
 
         <h3 class="text-center mb-1" style="font-weight:800;">Create Account</h3>
-        <p class="text-center mb-5" style="color:var(--text-muted);font-size:var(--font-size-sm);">
+        <p class="text-center mb-4" style="color:var(--text-muted);font-size:var(--font-size-sm);">
             Join Notely and start organising your thoughts
         </p>
 
@@ -64,7 +63,7 @@
             </div>
 
             <!-- Confirm Password -->
-            <div class="mb-5">
+            <div class="mb-4">
                 <label asp-for="ConfirmPassword" class="form-label">Confirm password</label>
                 <div class="position-relative">
                     <i class="bi bi-lock-fill" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;"></i>
@@ -83,7 +82,7 @@
             </div>
 
             <!-- Login link -->
-            <p class="text-center mb-0" style="font-size:var(--font-size-sm);color:var(--text-muted);">
+            <p class="text-center mb-3" style="font-size:var(--font-size-sm);color:var(--text-muted);">
                 Already have an account?
                 <a asp-action="Login" style="font-weight:600;">Sign in &rarr;</a>
             </p>

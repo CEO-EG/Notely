@@ -17,20 +17,34 @@ namespace Notely.Controllers
            UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IWebHostEnvironment env,
-            AppDbContext contex)
-                {
+            AppDbContext context)
+        {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = env;
-            _context = contex;
+            _context = context;
         }
 
         [HttpGet]
-        public IActionResult Register() => View();
+        
+        public IActionResult Register()
+        {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return RedirectToAction("Index", "Notes");
+            }
+
+            return View();
+        }
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return RedirectToAction("Index", "Notes");
+            }
+
             if (!ModelState.IsValid)
                 return View(model);
             string? filePath = null;
@@ -56,11 +70,10 @@ namespace Notely.Controllers
 
             var user = new ApplicationUser
             {
-                
-                FullName = model.FirstName + " " + model.LastName,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 UserName = model.Email,
                 Email = model.Email,
-                EmailConfirmed = true,
                 ProfileImagepath = filePath,
             };
 
@@ -68,24 +81,18 @@ namespace Notely.Controllers
 
             if (result.Succeeded)
             {
-              
-
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                HttpContext.Session.SetString("UserId", user.Id.ToString());
-
-                HttpContext.Session.SetString("UserName", user.FullName ?? "");
-
-                HttpContext.Session.SetString("UserEmail", user.Email ?? "");
-
-
-
+                await _signInManager.SignInAsync(user, isPersistent: true);
                 TempData["Toast"] = "Welcome to Notely! 🎉";
 
                 return RedirectToAction("Index", "Notes");
             }
 
             foreach (var error in result.Errors)
+            {
+                if (error.Code == "DuplicateUserName")
+                    continue;
                 ModelState.AddModelError("", error.Description);
+            }
 
             return View(model);
         }
@@ -93,6 +100,11 @@ namespace Notely.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return RedirectToAction("Index", "Notes");
+            }
+
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -100,6 +112,11 @@ namespace Notely.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return RedirectToAction("Index", "Notes");
+            }
+
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -117,13 +134,6 @@ namespace Notely.Controllers
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     return Redirect(returnUrl);
 
-                var user = await _userManager.GetUserAsync(User);
-                HttpContext.Session.SetString("UserId", user.Id.ToString());
-                HttpContext.Session.SetString("UserName", user.FullName);
-                HttpContext.Session.SetString("UserEmail", user.Email);
-
-
-
                 return RedirectToAction("Index", "Notes");
             }
 
@@ -135,30 +145,27 @@ namespace Notely.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
 
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            var user = _userManager.GetUserAsync(User).Result;
+            var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
             {
                 return RedirectToAction("Login");
             }
-            ViewBag.SessionName = HttpContext.Session.GetString("UserName");
-
-            var userId = _userManager.GetUserId(User);
 
             var notes = _context.Notes
-                .Where(n => n.UserId == userId)
+                .Where(n => n.UserId == user.Id)
                 .ToList();
 
             var model = new ProfileViewModel
             {
-                FullName = user.FullName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 ProfileImagePath = user.ProfileImagepath,
                 Notes = notes
@@ -168,28 +175,40 @@ namespace Notely.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateProfile(string Fullname, string Email, IFormFile? ProfileImage)
+        public async Task<IActionResult> UpdateProfile(string FirstName, string LastName, string Email, IFormFile? ProfileImage)
         {
             var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
                 return RedirectToAction("Login");
 
-            // Update basic info
-            user.FullName = Fullname;
+            user.FirstName = FirstName;
+            user.LastName = LastName;
             user.Email = Email;
             user.UserName = Email;
 
-            // 🔥 Handle image upload
             if (ProfileImage != null && ProfileImage.Length > 0)
             {
-                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imgs");
+                if (!string.IsNullOrEmpty(user.ProfileImagepath))
+                {
+                    var oldImagePath = Path.Combine(
+                        _env.WebRootPath,
+                        user.ProfileImagepath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+                    );
 
-                if (!Directory.Exists(folderPath))
-                    Directory.CreateDirectory(folderPath);
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "imgs");
+
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
 
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfileImage.FileName);
-                var filePath = Path.Combine(folderPath, fileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -200,9 +219,6 @@ namespace Notely.Controllers
             }
 
             await _userManager.UpdateAsync(user);
-            HttpContext.Session.SetString("UserName", user.FullName);
-            HttpContext.Session.SetString("UserEmail", user.Email);
-
             return RedirectToAction("Profile");
         }
 
@@ -217,11 +233,9 @@ namespace Notely.Controllers
             if (user == null)
                 return RedirectToAction("Login");
 
-            string userId = user.Id.ToString();
-
             // get all user notes
             var notes = _context.Notes
-                .Where(n => n.UserId == userId)
+                .Where(n => n.UserId == user.Id)
                 .ToList();
 
             // delete note images
@@ -231,7 +245,8 @@ namespace Notely.Controllers
                 {
                     var imagePath = Path.Combine(
                         _env.WebRootPath,
-                        note.ImagePath.TrimStart('/')
+                        note.ImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+
                     );
 
                     if (System.IO.File.Exists(imagePath))
@@ -241,17 +256,16 @@ namespace Notely.Controllers
                 }
             }
 
-            // delete notes
-            _context.Notes.RemoveRange(notes);
 
+            _context.Notes.RemoveRange(notes);
             await _context.SaveChangesAsync();
 
-            // delete profile image
+            // delete user image
             if (!string.IsNullOrEmpty(user.ProfileImagepath))
             {
                 var profilePath = Path.Combine(
                     _env.WebRootPath,
-                    user.ProfileImagepath.TrimStart('/')
+                    user.ProfileImagepath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
                 );
 
                 if (System.IO.File.Exists(profilePath))
@@ -260,22 +274,11 @@ namespace Notely.Controllers
                 }
             }
 
-            // logout user
-            HttpContext.Session.Clear();
             await _signInManager.SignOutAsync();
-
-            // delete user directly from AspNetUsers
             _context.Users.Remove(user);
-
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Home");
         }
-
-        public IActionResult AccessDenied() => View();
-
-
-
-
     }
 }

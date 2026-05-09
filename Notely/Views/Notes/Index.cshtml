@@ -14,10 +14,18 @@
             My Notes
         </h2>
 
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-lg me-1"></i>
-            New Note
-        </a>
+        <div class="d-flex gap-2">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i>
+                New Note
+            </a>
+
+            <a asp-action="Public" class="btn btn-outline-danger">
+                <i class="bi bi-globe me-1"></i>
+                View Public Notes
+            </a>
+        </div>
+
 
     </div>
 
@@ -66,10 +74,9 @@
 
             @foreach (var note in Model)
             {
-                var currentUserId =
-                User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                 var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-                bool isOwner = note.UserId == currentUserId;
+                bool isOwner = currentUserId != null && note.UserId == int.Parse(currentUserId);
 
                 <div class="note-card">
 

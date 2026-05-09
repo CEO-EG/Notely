@@ -821,7 +821,7 @@ textarea.form-control {
 hr { border: none; border-top: 1px solid var(--border-color); margin: var(--space-6) 0; }
 
 /* ── Smooth transitions on theme-sensitive elements ─────────── */
-.card, .form-card, .auth-card, .feature-card,
+.card, .form-card, .auth-card, 
 .form-control, .notely-navbar, .notely-dropdown,
 .notely-footer, input, textarea, select {
     transition-property: background-color, border-color, color, box-shadow;

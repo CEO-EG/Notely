@@ -4,10 +4,10 @@
 
 @{
     var user = await UserManager.GetUserAsync(User);
-    var firstName = user?.FullName?.Split(' ').FirstOrDefault() ?? "User";
+    var firstName = user?.FirstName ?? "User";
     var profileImage = !string.IsNullOrEmpty(user?.ProfileImagepath)
         ? user.ProfileImagepath
-        : "/imgs/default.png";
+        : "/imgs/default.jpg";
 }
 
 <!DOCTYPE html>
@@ -83,15 +83,15 @@
                                 <a class="nav-link avatar-trigger dropdown-toggle"
                                    href="#" data-bs-toggle="dropdown"
                                    aria-expanded="false">
-                                    <img src="@(user?.ProfileImagepath ?? "/imgs/default.png")"
+                                    <img src="@(user?.ProfileImagepath ?? "/imgs/default.jpg")"
                                          class="avatar-img" alt="@firstName" />
                                     <span class="fw-600 hide-mobile">@firstName</span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end notely-dropdown text-center">
-                                    <img src="@(user?.ProfileImagepath ?? "/imgs/default.png")"
-                                         class="dropdown-avatar mb-3" alt="@user?.FullName" />
-                                    <h6 class="mb-0 fw-700">@user?.FullName</h6>
+                                    <img src="@(user?.ProfileImagepath ?? "/imgs/default.jpg")"
+                                         class="dropdown-avatar mb-3" alt="@user?.FirstName @user?.LastName" />
+                                    <h6 class="mb-0 fw-700">@user?.FirstName @user?.LastName</h6>
                                     <p class="text-muted mb-3" style="font-size:12px">@user?.Email</p>
 
                                     <hr />
