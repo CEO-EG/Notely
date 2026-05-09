@@ -29,7 +29,7 @@ namespace Notely.Controllers
         private async Task<IActionResult?> RequireAdmin()
         {
             if (!await IsAdmin())
-                return RedirectToAction("AccessDenied", "Error");
+                return StatusCode(403);
 
             return null;
         }
@@ -66,6 +66,13 @@ namespace Notely.Controllers
 
             if (user == null)
                 return NotFound();
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser != null && currentUser.Id == user.Id)
+                return RedirectToAction(nameof(Index));
+
+            if (string.Equals(user.Role, "Admin", StringComparison.OrdinalIgnoreCase))
+                return RedirectToAction(nameof(Index));
 
             var notes = await _context.Notes
                 .Where(n => n.UserId == user.Id)

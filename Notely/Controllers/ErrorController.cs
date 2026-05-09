@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Notely.Models;
 
 namespace Notely.Controllers
 {
@@ -12,7 +13,13 @@ namespace Notely.Controllers
                 return View("AccessDenied");
             }
 
-            return View("NotFound");
+            if (statusCode == 404)
+            {
+                return View("NotFound");
+            }
+
+            var model = new ErrorViewModel { RequestId = HttpContext.TraceIdentifier };
+            return View("~/Views/Shared/Error.cshtml", model);
         }
 
         [Route("Error/AccessDenied")]
