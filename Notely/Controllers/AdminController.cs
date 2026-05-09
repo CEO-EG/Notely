@@ -12,7 +12,6 @@ namespace Notely.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _env;
-        private ApplicationUser? _currentUser;
 
         public AdminController(AppDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment env)
         {
@@ -29,11 +28,7 @@ namespace Notely.Controllers
 
         private async Task<ApplicationUser?> GetCurrentUser()
         {
-            if (_currentUser != null)
-                return _currentUser;
-
-            _currentUser = await _userManager.GetUserAsync(User);
-            return _currentUser;
+            return await _userManager.GetUserAsync(User);
         }
 
         private async Task<IActionResult?> RequireAdmin()
@@ -99,35 +94,13 @@ namespace Notely.Controllers
 
             foreach (var note in notes)
             {
-                if (!string.IsNullOrEmpty(note.ImagePath))
-                {
-                    var imagePath = Path.Combine(
-                        _env.WebRootPath,
-                        note.ImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
-                    );
-
-                    if (System.IO.File.Exists(imagePath))
-                    {
-                        System.IO.File.Delete(imagePath);
-                    }
-                }
+                DeleteImageFile(note.ImagePath);
             }
 
             _context.Notes.RemoveRange(notes);
             await _context.SaveChangesAsync();
 
-            if (!string.IsNullOrEmpty(user.ProfileImagepath))
-            {
-                var profilePath = Path.Combine(
-                    _env.WebRootPath,
-                    user.ProfileImagepath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
-                );
-
-                if (System.IO.File.Exists(profilePath))
-                {
-                    System.IO.File.Delete(profilePath);
-                }
-            }
+            DeleteImageFile(user.ProfileImagepath);
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
@@ -148,23 +121,28 @@ namespace Notely.Controllers
             if (note == null)
                 return NotFound();
 
-            if (!string.IsNullOrEmpty(note.ImagePath))
-            {
-                var oldImagePath = Path.Combine(
-                    _env.WebRootPath,
-                    note.ImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
-                );
-
-                if (System.IO.File.Exists(oldImagePath))
-                {
-                    System.IO.File.Delete(oldImagePath);
-                }
-            }
+            DeleteImageFile(note.ImagePath);
 
             _context.Notes.Remove(note);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private void DeleteImageFile(string? imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath))
+                return;
+
+            var fullPath = Path.Combine(
+                _env.WebRootPath,
+                imagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+            );
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
         }
     }
 }
