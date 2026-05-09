@@ -61,3 +61,55 @@
 
 /* Hide empty validation summary (renders even when no errors) */
 .validation-summary-valid { display: none !important; }
+
+/* Admin dashboard */
+.admin-dashboard .admin-dashboard-card {
+    max-width: 100%;
+}
+
+.admin-dashboard .admin-dashboard-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.admin-dashboard .admin-dashboard-table th,
+.admin-dashboard .admin-dashboard-table td,
+.admin-dashboard .admin-cell-text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.admin-dashboard .admin-dashboard-table th:last-child,
+.admin-dashboard .admin-dashboard-table td:last-child {
+    white-space: nowrap;
+    width: 1%;
+}
+
+[data-theme="dark"] .admin-dashboard .admin-dashboard-table {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .admin-dashboard .admin-dashboard-table thead th {
+    color: #cbd5e1;
+    background: rgba(15,23,42,.45);
+    border-bottom-color: #475569;
+}
+
+[data-theme="dark"] .admin-dashboard .admin-dashboard-table td {
+    border-color: #334155;
+}
+
+[data-theme="dark"] .admin-dashboard .admin-dashboard-table tbody tr:hover {
+    background: rgba(99,102,241,.12);
+}
+
+[data-theme="dark"] .admin-dashboard .badge.bg-secondary {
+    background: rgba(148,163,184,.24) !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .admin-dashboard .badge.bg-success {
+    background: rgba(16,185,129,.22) !important;
+    color: #6ee7b7 !important;
+}
